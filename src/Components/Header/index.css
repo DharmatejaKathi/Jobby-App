@@ -28,11 +28,23 @@
   color: #f1f5f9;
   font-family: 'Roboto';
   font-weight: 450;
-  height: 28px;
+  height: 32px;
   cursor: pointer;
 }
 .jobs-link {
   text-decoration: none;
   color: #f1f5f9;
   font-family: 'Roboto';
+  margin-right: 12px;
+}
+.header-list {
+  list-style-type: none;
+  display: flex;
+}
+.header-ul {
+  padding: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

@@ -51,7 +51,7 @@ class ProfileDetails extends Component {
   }
 
   renderLoader = () => (
-    <div className="products-loader-container">
+    <div className="products-loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
@@ -61,7 +61,7 @@ class ProfileDetails extends Component {
     const {name, profileUrl, bio} = profileDetails
     return (
       <div className="profile-container">
-        <img src={profileUrl} alt={name} />
+        <img src={profileUrl} alt="profile" />
         <h1 className="profile-name">{name}</h1>
         <p className="bio">{bio}</p>
       </div>

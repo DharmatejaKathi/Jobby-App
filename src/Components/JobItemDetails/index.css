@@ -74,3 +74,49 @@
   font-weight: bold;
   cursor: pointer;
 }
+.s-ul {
+  display: flex;
+  width: 100%;
+}
+.con {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+.Description-s {
+  font-size: 20px;
+  font-family: 'Roboto';
+  color: white;
+  font-weight: 450;
+  padding-left: 60px;
+  padding-right: 60px;
+}
+.not-c {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+.not-h {
+  color: white;
+  font-family: 'Roboto';
+  font-size: 40px;
+}
+
+.not-p {
+  color: #7e858e;
+  font-family: 'Roboto';
+  font-size: 40px;
+}
+.retry-button {
+  width: 120px;
+  background-color: #4f46e5;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  color: #f1f5f9;
+  font-family: 'Roboto';
+  font-weight: 450;
+  height: 34px;
+  cursor: pointer;
+}

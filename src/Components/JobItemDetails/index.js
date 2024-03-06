@@ -13,6 +13,7 @@ import {RiHandbagFill} from 'react-icons/ri'
 import {GoLinkExternal} from 'react-icons/go'
 
 import Header from '../Header'
+import SimilarJobCard from '../SimilarJobCard'
 
 import './index.css'
 
@@ -26,7 +27,7 @@ const apiStatusConstants = {
 class JobItemDetails extends Component {
   state = {
     jobDetails: [],
-    similarjob: [],
+    similarJob: [],
     apiStatus: apiStatusConstants.initial,
   }
 
@@ -77,7 +78,7 @@ class JobItemDetails extends Component {
       const similarJobs = data.similar_jobs.map(eachJob => ({
         companyLogoUrl: eachJob.company_logo_url,
         id: eachJob.id,
-        jobDescription: eachJob.description,
+        jobDescriptions: eachJob.job_description,
         employmentType: eachJob.employment_type,
         location: eachJob.location,
         rating: eachJob.rating,
@@ -85,20 +86,22 @@ class JobItemDetails extends Component {
       }))
       this.setState({
         jobDetails: updatedData,
-        similarjob: similarJobs,
+        similarJob: similarJobs,
         apiStatus: apiStatusConstants.success,
       })
+    } else {
+      this.setState({apiStatus: apiStatusConstants.failure})
     }
   }
 
   renderLoader = () => (
-    <div className="products-loader-container">
+    <div className="products-loader-container" data-testid="loader">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
 
   renderJobDetails = () => {
-    const {jobDetails} = this.state
+    const {jobDetails, similarJob} = this.state
     if (jobDetails.length >= 1) {
       const {
         companyLogoUrl,
@@ -117,9 +120,13 @@ class JobItemDetails extends Component {
           <Header />
           <div className="c">
             <div className="company-logo-container">
-              <img className="company-logo" src={companyLogoUrl} alt="logo" />
+              <img
+                className="company-logo"
+                src={companyLogoUrl}
+                alt="job details company logo"
+              />
               <div>
-                <p className="job-title">{title}</p>
+                <h1 className="job-title">{title}</h1>
                 <div className="rating-container">
                   <TiStarFullOutline className="rating" />
                   <p className="rating-para">{rating}</p>
@@ -141,7 +148,7 @@ class JobItemDetails extends Component {
             </div>
             <hr className="line" />
             <div className="life">
-              <p className="Description">Description</p>
+              <h1 className="Description">Description</h1>
               <a className="link-c" href={companyWebsiteUrl}>
                 Visit
                 <GoLinkExternal />
@@ -149,7 +156,7 @@ class JobItemDetails extends Component {
             </div>
 
             <p className="des">{jobDescription}</p>
-            <p className="Description">Skills</p>
+            <h1 className="Description">Skills</h1>
             <ul className="skill-ul">
               {skills.map(each => (
                 <li key={each.name} className="skill-li">
@@ -162,16 +169,22 @@ class JobItemDetails extends Component {
                 </li>
               ))}
             </ul>
-            <p className="Description">Life at Company</p>
+            <h1 className="Description">Life at Company</h1>
             <div className="life">
               <p className="des">{lifeAtCompany.description}</p>
               <img
                 className="com-img"
                 src={lifeAtCompany.imageUrl}
-                alt="company logo"
+                alt="life at company"
               />
             </div>
           </div>
+          <h1 className="Description-s">Similar jobs</h1>
+          <ul className="s-ul">
+            {similarJob.map(each => (
+              <SimilarJobCard details={each} key={each.employmentType} />
+            ))}
+          </ul>
         </>
       )
     }
@@ -179,8 +192,20 @@ class JobItemDetails extends Component {
   }
 
   renderFailure = () => (
-    <div>
-      <button type="button" onClick={this.renderJobDetails}>
+    <div className="not-c">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/failure-img.png"
+        alt="failure view"
+      />
+      <h1 className="not-h">Oops! Something Went Wrong</h1>
+      <p className="not-p">
+        We cannot seem to find the page you are looking for
+      </p>
+      <button
+        className="retry-button"
+        type="button"
+        onClick={this.getJobDetails}
+      >
         Retry
       </button>
     </div>
