@@ -70,7 +70,13 @@ class ProfileDetails extends Component {
 
   renderFailure = () => (
     <div>
-      <button type="button">Retry</button>
+      <button
+        type="button"
+        className="logout-button"
+        onClick={this.getProfileDetails}
+      >
+        Retry
+      </button>
     </div>
   )
 
