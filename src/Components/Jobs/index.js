@@ -50,6 +50,25 @@ const salaryRangesList = [
   },
 ]
 
+const location = [
+  {
+    label: 'Hyderabad',
+    locationId: 'HYDERABAD',
+  },
+  {
+    label: 'Bangalore',
+    locationId: 'BANGALORE',
+  },
+  {
+    label: 'Chennai',
+    locationId: 'CHENNAI',
+  },
+  {
+    label: 'Delhi',
+    locationId: 'DELHI',
+  },
+]
+
 const apiStatusConstants = {
   initial: 'INITIAL',
   inProgress: 'IN_PROGRESS',
@@ -62,7 +81,8 @@ class Jobs extends Component {
     jobsList: [],
     activeCheckId: [],
     activeRadioId: '',
-    searchInput: '',
+    activeCityId: [],
+    search: '',
     apiStatus: apiStatusConstants.initial,
   }
 
@@ -72,10 +92,10 @@ class Jobs extends Component {
 
   getJobsList = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
-    const {activeCheckId, activeRadioId, searchInput} = this.state
+    const {activeCheckId, activeRadioId, search, activeCityId} = this.state
     const jwtToken = Cookies.get('jwt_token')
 
-    const jobListUrl = `https://apis.ccbp.in/jobs?employment_type=${activeCheckId}&minimum_package=${activeRadioId}&search=${searchInput}`
+    const jobListUrl = `https://apis.ccbp.in/jobs?employment_type=${activeCheckId}&minimum_package=${activeRadioId}&search=${search}&location=${activeCityId}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
@@ -147,6 +167,22 @@ class Jobs extends Component {
     }
   }
 
+  onChangeCity = event => {
+    const {activeCityId} = this.state
+    console.log(activeCityId)
+    if (activeCityId.includes(event.target.id)) {
+      const updateList = activeCityId.filter(each => each !== event.target.id)
+      this.setState({activeCityId: updateList}, this.getJobsList)
+    } else {
+      this.setState(
+        prevState => ({
+          activeCityId: [...prevState.activeCityId, event.target.id],
+        }),
+        this.getJobsList,
+      )
+    }
+  }
+
   onGetRadio = () => (
     <ul className="ul">
       {salaryRangesList.map(each => (
@@ -184,8 +220,26 @@ class Jobs extends Component {
     </ul>
   )
 
+  onGetCity = () => (
+    <ul className="ul">
+      {location.map(each => (
+        <li className="checkbox-list" key={each.locationId}>
+          <input
+            type="checkBox"
+            id={each.locationId}
+            className="check-box"
+            onChange={this.onChangeCity}
+          />
+          <label htmlFor={each.locationId} className="label-item">
+            {each.label}
+          </label>
+        </li>
+      ))}
+    </ul>
+  )
+
   onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value})
+    this.setState({search: event.target.value}, this.getJobsList)
   }
 
   searchBar = () => {
@@ -204,7 +258,7 @@ class Jobs extends Component {
           data-testid="searchButton"
           className="search-button"
         >
-          <AiOutlineSearch />S
+          <AiOutlineSearch size={17} /> Search
         </button>
       </div>
     )
@@ -259,6 +313,9 @@ class Jobs extends Component {
             <hr />
             <h1 className="title">Salary Range</h1>
             {this.onGetRadio()}
+            <hr />
+            <h1 className="title">Locations</h1>
+            {this.onGetCity()}
           </div>
           <div className="jobs-list-container">
             {this.searchBar()}
